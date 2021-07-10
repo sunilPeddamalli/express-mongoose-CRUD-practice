@@ -14,13 +14,15 @@
         Product Name : <%= product.name %>
     </h1>
     <h2>
-        Product Price: <%= product.price %>
+        Product Price: $<%= product.price %>
     </h2>
     <h2>
-        Product Category: <%= product.category %>
+        Product Category: <a href="/products?category=<%= product.category %> ">
+            <%= product.category %>
+        </a>
     </h2>
 
-    <a href="/products">Back</a>
+    <a href="/products">All Products</a>
     <br><br>
     <a href="/products/<%= product._id %>/edit ">Edit</a>
     <br><br>

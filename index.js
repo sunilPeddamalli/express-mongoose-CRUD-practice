@@ -1,16 +1,17 @@
 const express = require('express');
 const app = express();
 const mongoose = require('mongoose');
-const Product = require('./model/product')
+const Product = require('./model/product');
+const Farm = require('./model/farm');
 const path = require('path');
 const methodOverride = require('method-override');
 
-mongoose.connect('mongodb://localhost:27017/test', { useNewUrlParser: true, useUnifiedTopology: true }).then(() => {
+mongoose.connect('mongodb://localhost:27017/farms', { useNewUrlParser: true, useUnifiedTopology: true }).then(() => {
     console.log('Connected to DB');
 }).catch((err) => {
     console.log('DB error!');
     console.log(err);
-})
+});
 
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, '/views'));
@@ -24,6 +25,23 @@ app.get('/', (req, res) => {
     res.send('Welcome!!!')
 })
 
+// Farm Routes
+app.get('/farms', async (req, res) => {
+    const farms = await Farm.find({});
+    res.render('farms/index', { farms });
+});
+
+app.get('/farms/new', async (req, res) => {
+    res.render('farms/new');
+})
+
+app.post('/farms', async (req, res) => {
+    const farm = new Farm(req.body);
+    await farm.save();
+    res.redirect('/farms');
+});
+
+// Product Routes
 app.get('/products', async (req, res) => {
     const { category } = req.query;
     if (category) {
@@ -33,7 +51,7 @@ app.get('/products', async (req, res) => {
         const products = await Product.find({})
         res.render('products/index', { products, category });
     }
-})
+});
 
 app.get('/products/new', (req, res) => {
     res.render('products/new');
@@ -67,8 +85,30 @@ app.delete('/products/:id', async (req, res) => {
     const { id } = req.params;
     await Product.findByIdAndDelete(id);
     res.redirect('/products');
+});
+
+/*
+class AppError extends Error {
+    constructor(status, message) {
+        super();
+        this.status = status;
+        this.message = message
+    }
+}
+
+app.get('/error', (req, res) => {
+    // throw new AppError(300, 'Error!')
+    chicken.fly();
 })
+
+app.use((err, req, res, next) => {
+    const { status = 700, message = 'Something went wrong' } = err
+    console.log(status, err.message);
+    next(err.message)
+    // res.status(status).send('Error!')
+})
+*/
 
 app.listen(3000, () => {
     console.log('listening to port 3000');
-})
+});

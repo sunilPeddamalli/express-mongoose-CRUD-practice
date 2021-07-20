@@ -13,10 +13,19 @@
     <ul>
         <% for(farm of farms) {%>
             <li>
-                <%= farm.name %>
+                <a href="farms/<%= farm._id%>">
+                    <%= farm.name %>
+                </a>
             </li>
             <% } %>
     </ul>
+
+
+
+    <a href="/products">All products</a>
+    <br><br>
+    <a href="/farms/new">Add new farm</a>
+
 </body>
 
 </html>

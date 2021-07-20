@@ -21,6 +21,13 @@
             <%= product.category %>
         </a>
     </h2>
+    <h2>
+        Produced By : <a href="/farms/<%= product.farms._id %> ">
+            <%= product.farms.name %>
+        </a>
+    </h2>
+
+
 
     <a href="/products">All Products</a>
     <br><br>
